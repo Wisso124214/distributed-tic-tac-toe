@@ -23,9 +23,18 @@ class PCClient
         var line = await reader.ReadLineAsync();
         if (line == null) break;
         var msg = JsonSerializer.Deserialize<ServerToClientMessage>(line);
+        Console.Clear();
         PrintBoard(msg.State.Board);
-        Console.WriteLine($"PC es '{msg.YourSymbol}'. Turno: '{msg.State.CurrentTurn}'");
-        Console.WriteLine($"Marcador: O: {msg.State.PlayerOWins} X: {msg.State.PlayerXWins} Empates: {msg.State.Ties}");
+        Console.Write("PC es '");
+        PrintWithColor(msg.YourSymbol, msg.YourSymbol == 'O' ? GameConfig.ConfigColorO : GameConfig.ConfigColorX);
+        Console.Write("'. Turno: '");
+        PrintWithColor(msg.State.CurrentTurn, msg.State.CurrentTurn == 'O' ? GameConfig.ConfigColorO : GameConfig.ConfigColorX);
+        Console.WriteLine("'");
+        Console.Write("Marcador: ");
+        PrintWithColor('O', GameConfig.ConfigColorO);
+        Console.Write($": {msg.State.PlayerOWins} ");
+        PrintWithColor('X', GameConfig.ConfigColorX);
+        Console.Write($": {msg.State.PlayerXWins} Empates: {msg.State.Ties}\n");
         if (msg.State.Status == GameStatus.GameOver)
         {
           if (msg.CanPlayAgain)
@@ -68,15 +77,11 @@ class PCClient
         int idx = i + j;
         if (board[idx] == 'O')
         {
-          Console.ForegroundColor = GameConfig.ConfigColorO;
-          Console.Write("O");
-          Console.ResetColor();
+          PrintWithColor('O', GameConfig.ConfigColorO);
         }
         else if (board[idx] == 'X')
         {
-          Console.ForegroundColor = GameConfig.ConfigColorX;
-          Console.Write("X");
-          Console.ResetColor();
+          PrintWithColor('X', GameConfig.ConfigColorX);
         }
         else
         {
@@ -88,5 +93,13 @@ class PCClient
       if (i < 6) Console.WriteLine("---+---+---");
     }
     Console.WriteLine();
+  }
+
+  static void PrintWithColor(char symbol, ConsoleColor color)
+  {
+    var prev = Console.ForegroundColor;
+    Console.ForegroundColor = color;
+    Console.Write(symbol);
+    Console.ForegroundColor = prev;
   }
 }
