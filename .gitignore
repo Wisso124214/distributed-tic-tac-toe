@@ -1,0 +1,8 @@
+Server/bin/
+Server/obj/
+Shared/bin/
+Shared/obj/
+
+# Ignorar todas las carpetas bin y obj en cualquier subcarpeta
+**/bin/
+**/obj/
