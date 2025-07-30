@@ -80,7 +80,7 @@ class PCClient
         }
         else
         {
-          Console.Write(idx);
+          Console.Write(idx + 1);
         }
         if (j < 2) Console.Write(" |");
       }
